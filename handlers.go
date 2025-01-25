@@ -74,6 +74,7 @@ func (h *handler) postMovie(res http.ResponseWriter, req *http.Request) {
 	rating, err := strconv.ParseFloat(req.FormValue("rating"), 64)
 	if err != nil {
 		http.Error(res, "rating is not valid", http.StatusBadRequest)
+		return
 	}
 	movie := movie{
 		Name:     req.FormValue("movie"),
@@ -82,20 +83,12 @@ func (h *handler) postMovie(res http.ResponseWriter, req *http.Request) {
 	}
 
 	quryString := "INSERT INTO movies (name, director, rating) VALUES ($1, $2, $3)"
-
 	_, err = h.dbPool.Exec(context.Background(), quryString, movie.Name, movie.Director, movie.Rating)
 	// fmt.Println(a) // it shows number of items inserted
 	if err != nil {
 		http.Error(res, "could not add to db", http.StatusInternalServerError)
+		return
 	}
 
-	res.Write([]byte("movie added"))
-}
-
-func (hand *handler) yupp(res http.ResponseWriter, req *http.Request) {
-	// templ := renderTemplates("index.html", res)
-	// templ.Execute(res, nil)
-
-	tmpl2 := renderTemplatesParseGlob(res)
-	tmpl2.Execute(res, nil)
+	http.Redirect(res, req, "/", http.StatusSeeOther) // use proper redirect status codes to make it work
 }

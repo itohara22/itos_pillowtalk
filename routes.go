@@ -9,9 +9,7 @@ func router(h *handler) *http.ServeMux {
 
 	// routerMux.HandleFunc("GET /{id}", func(res http.ResponseWriter, req *http.Request) {
 	// param := req.PathValue("id")
-	routerMux.HandleFunc("GET /{id}", h.nina)
-
-	routerMux.HandleFunc("GET /yup", h.yupp)
+	routerMux.HandleFunc("GET /film/{id}", h.nina)
 
 	routerMux.HandleFunc("POST /movie", h.postMovie)
 
