@@ -13,5 +13,7 @@ func router(h *handler) *http.ServeMux {
 
 	routerMux.HandleFunc("GET /yup", h.yupp)
 
+	routerMux.HandleFunc("POST /movie", h.postMovie)
+
 	return routerMux
 }

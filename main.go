@@ -19,6 +19,7 @@ type handler struct {
 }
 
 type movie struct {
+	// iD       int
 	ID       int     `json:"id"`
 	Name     string  `json:"name"`
 	Director string  `json:"director"`
