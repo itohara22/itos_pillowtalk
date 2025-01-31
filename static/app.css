@@ -1,0 +1,55 @@
+:root{
+  --text: #042313;
+  --bg: #f5fef8;
+  --pri: #21e364;
+  --sec: #c28bf0;
+  --acc: #e84ccd;
+  --sm: 0.750rem;
+  --base: 1rem;
+  --xl: 1.333rem;
+  --2xl: 1.777rem;
+  --3xl: 2.369rem;
+  --4xl: 3.158rem;
+  --5xl: 4.210rem;
+}
+
+*,*::before,*::after{
+  padding: 0;
+  margin: 0;
+}
+
+body{
+  background-color: var(--bg);
+}
+
+main{
+  padding: 0 var(--base);
+}
+
+h1 {font-size: var(--5xl);}
+
+h2 {font-size: var(--4xl);}
+
+h3 {font-size: var(--3xl);}
+
+h4 {font-size: var(--2xl);}
+
+h5 {font-size: var(--xl); }
+
+a{text-decoration:none;}
+
+ol, ul {
+	list-style: none;
+}
+
+.font-base{
+  font-size:var(--base);
+}
+
+.font-sm{
+  font-size:var(--sm);
+}
+
+h1{
+  color:var(--text);
+}

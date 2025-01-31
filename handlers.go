@@ -27,7 +27,7 @@ func renderTemplatesParseGlob(res http.ResponseWriter) *template.Template {
 	return tmp
 }
 
-func (h *handler) home(res http.ResponseWriter, req *http.Request) {
+func (h *handlerStruct) home(res http.ResponseWriter, req *http.Request) {
 	rows, err := h.dbPool.Query(context.Background(), "SELECT * FROM movies;")
 	if err != nil {
 		if err == pgx.ErrNoRows {
@@ -36,11 +36,13 @@ func (h *handler) home(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "Something went wrong", http.StatusInternalServerError)
 		fmt.Println(err.Error())
 	}
+	defer rows.Close()
 
-	var movies []movie
+	var movies films
 	for rows.Next() {
-		var film movie
+		var film film
 		err := rows.Scan(&film.ID, &film.Name, &film.Director, &film.Rating)
+		// nil deference means accessing a pointer of a variable which is not inintialized yet
 		if err != nil {
 			http.Error(res, "oh no!", http.StatusInternalServerError)
 			fmt.Println(err.Error())
@@ -54,11 +56,11 @@ func (h *handler) home(res http.ResponseWriter, req *http.Request) {
 	// tpl.Execute(res, nil) // it will execute the template according to the route and filename
 }
 
-func (hand *handler) nina(res http.ResponseWriter, req *http.Request) {
+func (hand *handlerStruct) nina(res http.ResponseWriter, req *http.Request) {
 	movieId := req.PathValue("id")
 	result := hand.dbPool.QueryRow(context.Background(), "SELECT id, name, director, rating FROM movies WHERE id = $1;", movieId)
 
-	var data movie
+	var data film
 	err := result.Scan(&data.ID, &data.Name, &data.Director, &data.Rating)
 	if err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
@@ -70,18 +72,14 @@ func (hand *handler) nina(res http.ResponseWriter, req *http.Request) {
 	tpl.ExecuteTemplate(res, "movie.html", data)
 }
 
-func (h *handler) postMovie(res http.ResponseWriter, req *http.Request) {
+func (h *handlerStruct) postMovie(res http.ResponseWriter, req *http.Request) {
 	rating, err := strconv.ParseFloat(req.FormValue("rating"), 64)
 	if err != nil {
 		http.Error(res, "rating is not valid", http.StatusBadRequest)
 		return
 	}
-	movie := movie{
-		Name:     req.FormValue("movie"),
-		Director: req.FormValue("director"),
-		Rating:   rating,
-	}
 
+	movie := newMovie(req.FormValue("movie"), req.FormValue("director"), rating)
 	quryString := "INSERT INTO movies (name, director, rating) VALUES ($1, $2, $3)"
 	_, err = h.dbPool.Exec(context.Background(), quryString, movie.Name, movie.Director, movie.Rating)
 	// fmt.Println(a) // it shows number of items inserted

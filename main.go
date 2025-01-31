@@ -14,16 +14,8 @@ const (
 	connString = "postgresql://dante:password@localhost:5432/dante"
 )
 
-type handler struct {
+type handlerStruct struct {
 	dbPool *pgxpool.Pool
-}
-
-type movie struct {
-	// iD       int
-	ID       int     `json:"id"`
-	Name     string  `json:"name"`
-	Director string  `json:"director"`
-	Rating   float64 `json:"rating"`
 }
 
 func main() {
@@ -33,7 +25,7 @@ func main() {
 	db := connectToDb()
 	defer db.Close()
 
-	h := handler{
+	h := handlerStruct{
 		dbPool: db,
 	}
 	ptToh := &h
