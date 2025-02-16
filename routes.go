@@ -13,7 +13,7 @@ func router(h *handlerStruct) *http.ServeMux {
 
 	// routerMux.HandleFunc("GET /{id}", func(res http.ResponseWriter, req *http.Request) {
 	// param := req.PathValue("id")
-	routerMux.HandleFunc("GET /film/{id}", h.nina)
+	routerMux.HandleFunc("GET /film/{id}", h.getMovieWithId)
 
 	routerMux.HandleFunc("POST /movie", h.postMovie)
 

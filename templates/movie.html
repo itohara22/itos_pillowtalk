@@ -1,6 +1,8 @@
 {{/* this is comment for go template*/}}
 {{template "header"}}
-    <h2>{{.Name}}</h2>
-    <h2>{{.Director}}</h2>
-    <h2>{{.Rating}}</h2>
+<main class="movie-details">
+    <h1 class="movie-title">{{.Name}}</h1>
+    <p class="movie-meta"><strong>Directed by:</strong> {{.Director}}</p>
+    <p class="movie-meta"><strong>Rating:</strong> ⭐ {{.Rating}}/10</p>
+</main>
 {{template "footer"}}

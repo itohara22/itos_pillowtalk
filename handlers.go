@@ -51,12 +51,14 @@ func (h *handlerStruct) home(res http.ResponseWriter, req *http.Request) {
 		movies = append(movies, film)
 	}
 
+	dataToPasedtoTemplate := map[string]any{"movies": movies, "title": "Home"}
+
 	tpl := renderTemplatesParseGlob(res)
-	tpl.ExecuteTemplate(res, "home.html", movies)
+	tpl.ExecuteTemplate(res, "home.html", dataToPasedtoTemplate)
 	// tpl.Execute(res, nil) // it will execute the template according to the route and filename
 }
 
-func (hand *handlerStruct) nina(res http.ResponseWriter, req *http.Request) {
+func (hand *handlerStruct) getMovieWithId(res http.ResponseWriter, req *http.Request) {
 	movieId := req.PathValue("id")
 	result := hand.dbPool.QueryRow(context.Background(), "SELECT id, name, director, rating FROM movies WHERE id = $1;", movieId)
 
@@ -68,6 +70,7 @@ func (hand *handlerStruct) nina(res http.ResponseWriter, req *http.Request) {
 	// res.Header().Set("Content-Type", "application/json")
 	// json.NewEncoder(res).Encode(data)
 	// fmt.Println(req.Header.Get("Accept"))
+
 	tpl := renderTemplatesParseGlob(res)
 	tpl.ExecuteTemplate(res, "movie.html", data)
 }
