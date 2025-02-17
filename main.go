@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sushi/handlers"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -14,10 +15,6 @@ const (
 	connString = "postgresql://dante:password@localhost:5432/dante"
 )
 
-type handlerStruct struct {
-	dbPool *pgxpool.Pool
-}
-
 func main() {
 	portCli := flag.String("port", ":6969", "port to serve on")
 	flag.Parse() /// important dont forget
@@ -25,8 +22,8 @@ func main() {
 	db := connectToDb()
 	defer db.Close()
 
-	h := handlerStruct{
-		dbPool: db,
+	h := handlers.HandlerStruct{
+		DbPool: db,
 	}
 	ptToh := &h
 	routerMux := router(ptToh)
@@ -44,6 +41,7 @@ func main() {
 }
 
 func connectToDb() *pgxpool.Pool {
+	// conte, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	dbPool, err := pgxpool.New(context.Background(), connString)
 	if err != nil {
 		log.Fatal(err.Error())
