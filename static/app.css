@@ -46,6 +46,9 @@ body {
 
 main {
   padding: 0 var(--base);
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
 }
 
 h1 {
@@ -85,26 +88,36 @@ ul {
   font-size: var(--sm);
 }
 
-.section-heading {
-  color: var(--sec);
-  text-align: center;
-  font-size: var(--4xl);
-}
 
 .header {
   padding: var(--base);
   font-size: var(--2xl);
   color: var(--pri);
   margin-bottom: var(--2xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  a:nth-of-type(2) {
+    font-size: var(--xl);
+    transition: all 100ms ease;
+
+    &:hover {
+      color: var(--acc);
+    }
+  }
+}
+
+.section-heading {
+  color: var(--sec);
+  /*text-align: center;*/
+  font-size: var(--4xl);
 }
 
 #movie-list {
   list-style: none;
-  padding: 0;
-  margin: 20px auto;
+  margin: 20px 0;
   padding: 16px;
-  border-radius: 8px;
-  width: 600px;
   font-size: var(--xl);
 }
 

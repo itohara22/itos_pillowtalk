@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"sushi/handlers"
@@ -22,9 +23,16 @@ func main() {
 	db := connectToDb()
 	defer db.Close()
 
+	tmp, err := parseTemplates()
+	if err != nil {
+		log.Panic(err.Error())
+	}
+
 	h := handlers.HandlerStruct{
 		DbPool: db,
+		T:      tmp,
 	}
+
 	ptToh := &h
 	routerMux := router(ptToh)
 	// we are using pointer to get struct at the memory address not the copy
@@ -34,7 +42,7 @@ func main() {
 		Handler: routerMux,
 	}
 	fmt.Printf("serving on %v\n", *portCli)
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -53,4 +61,9 @@ func connectToDb() *pgxpool.Pool {
 	}
 
 	return dbPool
+}
+
+func parseTemplates() (*template.Template, error) {
+	tmp, err := template.ParseGlob("templates/*.html")
+	return tmp, err
 }

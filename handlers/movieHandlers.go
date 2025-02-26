@@ -14,24 +14,24 @@ import (
 
 type HandlerStruct struct {
 	DbPool *pgxpool.Pool
+	T      *template.Template
 }
 
-func renderTemplates(filename string, res http.ResponseWriter) *template.Template {
-	tmp, err := template.ParseFiles("templates/" + filename)
-	if err != nil {
-		http.Error(res, "can't parse html template", http.StatusInternalServerError)
-	}
-	return tmp
-}
-
-func renderTemplatesParseGlob(res http.ResponseWriter) *template.Template {
-	tmp, err := template.ParseGlob("templates/*.html")
-	if err != nil {
-		http.Error(res, "can't parse html template", http.StatusInternalServerError)
-	}
-
-	return tmp
-}
+// func renderTemplates(filename string, res http.ResponseWriter) *template.Template {
+// 	tmp, err := template.ParseFiles("templates/" + filename)
+// 	if err != nil {
+// 		http.Error(res, "can't parse html template", http.StatusInternalServerError)
+// 	}
+// 	return tmp
+// }
+//
+// func renderTemplatesParseGlob(res http.ResponseWriter) *template.Template {
+// 	tmp, err := template.ParseGlob("templates/*.html")
+// 	if err != nil {
+// 		http.Error(res, "can't parse html template", http.StatusInternalServerError)
+// 	}
+// 	return tmp
+// }
 
 func (h *HandlerStruct) Home(res http.ResponseWriter, req *http.Request) {
 	rows, err := h.DbPool.Query(context.Background(), "SELECT * FROM movies;")
@@ -57,10 +57,10 @@ func (h *HandlerStruct) Home(res http.ResponseWriter, req *http.Request) {
 		movies = append(movies, film)
 	}
 
-	dataToPasedtoTemplate := map[string]any{"movies": movies, "title": "Home"}
+	dataToPasedtoTemplate := map[string]interface{}{"movies": movies, "title": "Home"} // inerface{} is like using any here
 
-	tpl := renderTemplatesParseGlob(res)
-	tpl.ExecuteTemplate(res, "home.html", dataToPasedtoTemplate)
+	// tpl := renderTemplatesParseGlob(res)
+	h.T.ExecuteTemplate(res, "home.html", dataToPasedtoTemplate)
 	// tpl.Execute(res, nil) // it will execute the template according to the route and filename
 }
 
@@ -77,8 +77,15 @@ func (hand *HandlerStruct) GetMovieWithId(res http.ResponseWriter, req *http.Req
 	// json.NewEncoder(res).Encode(data)
 	// fmt.Println(req.Header.Get("Accept"))
 
-	tpl := renderTemplatesParseGlob(res)
-	tpl.ExecuteTemplate(res, "movie.html", data)
+	// tpl := renderTemplatesParseGlob(res)
+	hand.T.ExecuteTemplate(res, "movie.html", data)
+}
+
+func (h *HandlerStruct) GetNewMovie(res http.ResponseWriter, req *http.Request) {
+	err := h.T.ExecuteTemplate(res, "addMovie.html", map[string]any{"title": "Add new movie"})
+	if err != nil {
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (h *HandlerStruct) PostMovie(res http.ResponseWriter, req *http.Request) {

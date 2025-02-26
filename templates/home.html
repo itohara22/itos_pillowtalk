@@ -1,6 +1,5 @@
 {{template "header" .title}}
     <main>
-    <!-- <h1>Movies</h1> -->
     <!-- Movie list -->
     <h2 class="section-heading">Cinema Wishpers</h2>
     <ul id="movie-list">
@@ -8,16 +7,5 @@
       <li><a href="/film/{{.ID}}">{{.Name}}</a></li>
       {{end}}
     </ul>
-  <!-- Add Movie Form -->
-    <h2 class="section-heading">Confession</h2>
-    <form id="add-movie-form" action="/movie" method="POST">
-      <label for="movie-name">Movie Name:</label>
-      <input type="text" id="movie-name" name="movie" placeholder="Enter movie name" required />
-      <label for="director">Director:</label>
-      <input type="text" id="director" name="director" placeholder="Enter director name" required />
-      <label for="rating">Rating:</label>
-      <input type="number" min="1" max="10" step="1" id="rating" name="rating" placeholder="Enter rating" required />
-      <button type="submit">Add Movie</button>
-    </form>
     </main>
 {{template "footer"}}
