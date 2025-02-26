@@ -3,19 +3,12 @@ package handlers
 import (
 	"context"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 	"sushi/models"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
-
-type HandlerStruct struct {
-	DbPool *pgxpool.Pool
-	T      *template.Template
-}
 
 // func renderTemplates(filename string, res http.ResponseWriter) *template.Template {
 // 	tmp, err := template.ParseFiles("templates/" + filename)
