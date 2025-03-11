@@ -17,6 +17,11 @@ func HashPassword(password string) (string, error) {
 	return string(hashedBytes), err
 }
 
+func VerifyPassword(password, hashedPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	return err == nil
+}
+
 func ConnectToDb() *pgxpool.Pool {
 	// conte, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	dbPool, err := pgxpool.New(context.Background(), connString)

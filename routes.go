@@ -20,6 +20,7 @@ func router(h *handlers.HandlerStruct) *http.ServeMux {
 
 	// user routes
 	routerMux.HandleFunc("POST /register", h.RegisterUser)
+	routerMux.HandleFunc("POST /login", h.Login)
 
 	return routerMux
 }
