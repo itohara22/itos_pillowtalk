@@ -74,13 +74,6 @@ func (hand *HandlerStruct) GetMovieWithId(res http.ResponseWriter, req *http.Req
 	hand.T.ExecuteTemplate(res, "movie.html", data)
 }
 
-func (h *HandlerStruct) GetNewMovie(res http.ResponseWriter, req *http.Request) {
-	err := h.T.ExecuteTemplate(res, "addMovie.html", map[string]any{"title": "Add new movie"})
-	if err != nil {
-		http.Error(res, err.Error(), http.StatusInternalServerError)
-	}
-}
-
 func (h *HandlerStruct) PostMovie(res http.ResponseWriter, req *http.Request) {
 	rating, err := strconv.ParseFloat(req.FormValue("rating"), 64)
 	if err != nil {
@@ -98,4 +91,11 @@ func (h *HandlerStruct) PostMovie(res http.ResponseWriter, req *http.Request) {
 	}
 
 	http.Redirect(res, req, "/", http.StatusSeeOther) // use proper redirect status codes to make it work
+}
+
+func (h *HandlerStruct) GetNewMoviePage(res http.ResponseWriter, req *http.Request) {
+	err := h.T.ExecuteTemplate(res, "addMovie.html", nil)
+	if err != nil {
+		http.Error(res, "Something went wrong", http.StatusInternalServerError)
+	}
 }

@@ -15,7 +15,7 @@ func router(h *handlers.HandlerStruct) *http.ServeMux {
 	routerMux.HandleFunc("GET /", h.Home)
 	// param := req.PathValue("id")
 	routerMux.HandleFunc("GET /film/{id}", h.GetMovieWithId)
-	routerMux.HandleFunc("GET /new-movie", h.GetNewMovie)
+	routerMux.HandleFunc("GET /new-movie", h.GetNewMoviePage)
 	routerMux.HandleFunc("POST /movie", h.PostMovie)
 
 	// user routes
