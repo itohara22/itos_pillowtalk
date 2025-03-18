@@ -36,3 +36,21 @@ func ConnectToDb() *pgxpool.Pool {
 
 	return dbPool
 }
+
+func RunMigrations(db *pgxpool.Pool) {
+	migrationQuery := `
+		CREATE TABLE IF NOT EXISTS movies (
+			id SERIAL PRIMARY KEY,
+			name TEXT NOT NULL,
+			director TEXT NOT NULL,
+			rating DOUBLE PRECISION CHECK (rating >= 0 AND rating <= 10)
+		);
+	`
+
+	_, err := db.Exec(context.Background(), migrationQuery)
+	if err != nil {
+		log.Fatal("Failed to apply migrations:", err)
+	}
+
+	log.Println("Migrations applied successfully")
+}

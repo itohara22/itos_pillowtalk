@@ -17,6 +17,8 @@ func main() {
 	db := utils.ConnectToDb()
 	defer db.Close()
 
+	utils.RunMigrations(db)
+
 	tmp, err := parseTemplates()
 	if err != nil {
 		log.Panic(err.Error())
