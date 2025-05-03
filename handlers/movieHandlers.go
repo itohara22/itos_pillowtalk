@@ -50,7 +50,8 @@ func (h *HandlerStruct) Home(res http.ResponseWriter, req *http.Request) {
 		movies = append(movies, film)
 	}
 
-	dataToPasedtoTemplate := map[string]interface{}{"movies": movies, "title": "Home"} // inerface{} is like using any here
+	// dataToPasedtoTemplate := map[string]interface{}{"movies": movies, "title": "Home"} // inerface{} is like using any here
+	dataToPasedtoTemplate := map[string]any{"movies": movies, "title": "Home"}
 
 	// tpl := renderTemplatesParseGlob(res)
 	h.T.ExecuteTemplate(res, "home.html", dataToPasedtoTemplate)
@@ -59,7 +60,9 @@ func (h *HandlerStruct) Home(res http.ResponseWriter, req *http.Request) {
 
 func (hand *HandlerStruct) GetMovieWithId(res http.ResponseWriter, req *http.Request) {
 	movieId := req.PathValue("id")
-	result := hand.DbPool.QueryRow(context.Background(), "SELECT id, name, director, rating FROM movies WHERE id = $1;", movieId)
+	// result := hand.DbPool.QueryRow(context.Background(), "SELECT id, name, director, rating FROM movies WHERE id = $1;", movieId)
+	// req already has context it is adivisable to use it
+	result := hand.DbPool.QueryRow(req.Context(), "SELECT id, name, director, rating FROM movies WHERE id = $1;", movieId)
 
 	var data models.Film
 	err := result.Scan(&data.ID, &data.Name, &data.Director, &data.Rating)

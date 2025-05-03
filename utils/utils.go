@@ -38,6 +38,7 @@ func ConnectToDb() *pgxpool.Pool {
 }
 
 func RunMigrations(db *pgxpool.Pool) {
+	// `` backticks preserve formatting in go no need to add \n
 	migrationQuery := `
 		CREATE TABLE IF NOT EXISTS movies (
 			id SERIAL PRIMARY KEY,

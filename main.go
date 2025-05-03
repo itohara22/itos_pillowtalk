@@ -17,20 +17,20 @@ func main() {
 	db := utils.ConnectToDb()
 	defer db.Close()
 
-	utils.RunMigrations(db)
+	// utils.RunMigrations(db)
 
-	tmp, err := parseTemplates()
+	parsedTemplates, err := parseTemplates()
 	if err != nil {
 		log.Panic(err.Error())
 	}
 
-	h := handlers.HandlerStruct{
+	handler := handlers.HandlerStruct{
 		DbPool: db,
-		T:      tmp,
+		T:      parsedTemplates,
 	}
 
-	ptToh := &h
-	routerMux := router(ptToh)
+	pointerToHandler := &handler
+	routerMux := router(pointerToHandler)
 	// we are using pointer to get struct at the memory address not the copy
 
 	server := &http.Server{
